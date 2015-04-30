@@ -1,0 +1,64 @@
+CREATE DATABASE VandelayDB;
+
+GO
+
+USE VandelayDB;
+
+CREATE TABLE tblDepartments
+(
+	DepartmentID VARCHAR(4) NOT NULL PRIMARY KEY,
+	DepartmentDescr VARCHAR(255) NOT NULL
+)
+
+GO
+
+CREATE TABLE tblEmployees
+(
+	EmployeeID VARCHAR(4) NOT NULL PRIMARY KEY,
+	DepartmentID VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblDepartments(DepartmentID),
+	FirstName VARCHAR(20) NOT NULL,
+	LastName VARCHAR(20) NOT NULL,
+	StreetAddress VARCHAR(50) NOT NULL,
+	City VARCHAR(20) NOT NULL,
+	EmpState VARCHAR(2) NOT NULL,
+	Zip INT NOT NULL,
+	ExtNum INT NOT NULL DEFAULT 0
+)
+
+GO
+
+CREATE TABLE tblInsuranceCos
+(
+	CompanyCode VARCHAR(4) NOT NULL PRIMARY KEY,
+	CompanyName VARCHAR(30) NOT NULL,
+	CompanyDescr VARCHAR(255) NOT NULL
+)
+
+GO
+
+CREATE TABLE tblDependentCodes
+(
+	DependentCode VARCHAR(4) NOT NULL PRIMARY KEY,
+	DependentDescr VARCHAR(255) NOT NULL
+)
+
+GO
+
+CREATE TABLE tblRates
+(
+	CompanyCode VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblInsuranceCos(CompanyCode),
+	DependentCode VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblDependentCodes(DependentCode),
+	Rate MONEY NOT NULL DEFAULT 0.00
+)
+
+GO
+
+CREATE TABLE tblEnrollments
+(
+	EmployeeID VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblEmployees(EmployeeID),
+	CompanyCode VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblInsuranceCos(CompanyCode),
+	DependentCode VARCHAR(4) NOT NULL FOREIGN KEY REFERENCES tblDependentCodes(DependentCode),
+	EffectiveDate DATETIME NOT NULL
+)
+
+GO
